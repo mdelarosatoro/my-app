@@ -1,0 +1,61 @@
+.button {
+    width: fit-content;
+    padding: 0.4rem 0.6rem;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease all;
+    height: fit-content;
+
+    &:hover {
+        background-color: rgb(44, 43, 43);
+        color: darkcyan;
+        transition: 0.3s ease all;
+    }
+}
+
+.deletebtn {
+    position: absolute;
+    top: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: 0.3s ease all;
+    right: 10px;
+    top: 10px;
+
+    &:hover {
+        transform: scale(1.2);
+        transition: 0.3s ease all;
+    }
+}
+
+.editbtn {
+    position: absolute;
+    top: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: 0.3s ease all;
+    right: 40px;
+    top: 10px;
+
+    &:hover {
+        transform: scale(1.2);
+        transition: 0.3s ease all;
+    }
+}
+
+.addbtn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: 0.3s ease all;
+    font-size: 2rem;
+
+    &:hover {
+        transform: scale(1.2);
+        transition: 0.3s ease all;
+    }
+}

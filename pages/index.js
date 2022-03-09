@@ -1,76 +1,67 @@
-import { useRouter } from 'next/router';
-import React from 'react';
+import { useRouter } from "next/router";
+import { useState } from "react";
+import AddClient from "../components/add-client/add-client";
+import Client from "../components/client/client";
+import Button from "../components/core/button/button";
+import Layout from "../components/core/layout/layout";
+import Grid from "../components/grid/grid";
+import Title from "../components/title/title";
 import {
-  createContact,
-  deleteContact,
-  editContact,
-  getAllContacts,
-  getToken,
-} from '../services/api-connection';
+    createContact,
+    deleteContact,
+    editContact,
+    getAllContacts,
+    getToken,
+} from "../services/api-connection";
 
 const Page = ({ data, token }) => {
-  const router = useRouter();
+    const [addMode, setAddMode] = useState(false);
 
-  const refreshSSProps = () => {
-    router.replace(router.asPath);
-  };
+    const toggleEditMode = () => setAddMode(!addMode);
 
-  return (
-    <div>
-      <form
-        onSubmit={(e) => createContact(e, token).then(() => refreshSSProps())}
-      >
-        <label htmlFor='name'>Name</label>
-        <input id='name' name='name' type='text' autoComplete='name' required />
-        <button type='submit'>Create</button>
-      </form>
-      {data &&
-        data.records &&
-        data.records.map((item) => {
-          return (
-            <div key={item.attributes.url}>
-              <p>--------------------</p>
-              <p>{item.Name}</p>
-              <button
-                onClick={() =>
-                  deleteContact(item.attributes.url, token).then(() =>
-                    refreshSSProps()
-                  )
-                }
-              >
-                Borrar
-              </button>
-              <form
-                onSubmit={(e) =>
-                  editContact(e, item.attributes.url, token).then(() =>
-                    refreshSSProps()
-                  )
-                }
-              >
-                <label htmlFor='name'>New Name</label>
-                <input
-                  id='name'
-                  name='name'
-                  type='text'
-                  autoComplete='name'
-                  required
+    const router = useRouter();
+
+    const refreshSSProps = () => {
+        router.replace(router.asPath);
+    };
+
+    return (
+        <Layout>
+            <Title toggleEditMode={toggleEditMode} addMode={addMode} />
+            {addMode && (
+                <AddClient
+                    token={token}
+                    createContact={createContact}
+                    refreshSSProps={refreshSSProps}
                 />
-                <button type='submit'>Edit</button>
-              </form>
-            </div>
-          );
-        })}
-    </div>
-  );
+            )}
+            <Grid>
+                {data &&
+                    data.records &&
+                    data.records.map((item) => {
+                        return (
+                            <Client
+                                key={item.id}
+                                client={item}
+                                refreshSSProps={refreshSSProps}
+                                deleteContact={deleteContact}
+                                token={token}
+                                editContact={editContact}
+                            />
+                        );
+                    })}
+            </Grid>
+        </Layout>
+    );
 };
 
 // Método para que me devuelva los datos de la API:
 
 export const getServerSideProps = async () => {
-  const token = await getToken();
-  const data = await getAllContacts();
+    const token = await getToken();
+    const data = await getAllContacts();
 
-  return { props: { data, token } };
+    return { props: { data, token } };
 };
 
 export default Page;
